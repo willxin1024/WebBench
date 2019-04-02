@@ -26,6 +26,10 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+/**
+ * 完成socket创建之前的操作
+ * 
+*/
 int Socket(const char *host, int clientPort)
 {
     int sock;
@@ -37,11 +41,16 @@ int Socket(const char *host, int clientPort)
     ad.sin_family = AF_INET;
 
     inaddr = inet_addr(host);
-    if (inaddr != INADDR_NONE)
+    /*
+       If  the input is invalid, INADDR_NONE (usually -1) is returned.  Use of
+       this  function  is  problematic  because  -1   is   a   valid   address
+       (255.255.255.255).    
+    */
+    if (inaddr != INADDR_NONE) // 输入有效
         memcpy(&ad.sin_addr, &inaddr, sizeof(inaddr));
     else
     {
-        hp = gethostbyname(host);
+        hp = gethostbyname(host); // 查询dns解析域名为ip
         if (hp == NULL)
             return -1;
         memcpy(&ad.sin_addr, hp->h_addr, hp->h_length);
