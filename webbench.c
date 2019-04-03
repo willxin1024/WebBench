@@ -465,6 +465,7 @@ static int bench(void)
             return 3;
         }
 
+        // 禁用缓冲，直接读写，提升效率
         setvbuf(f, NULL, _IONBF, 0);
 
         speed = 0;
